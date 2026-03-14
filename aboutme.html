@@ -21,7 +21,7 @@
       overflow-x: hidden;
     }
 
-    /* Floating orbs */
+    /* Floating Orbs */
     .orb {
       position: fixed;
       border-radius: 50%;
@@ -103,7 +103,10 @@
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
       border-radius: 12px;
       z-index: 10;
-      animation: dropIn 0.25s ease;
+    }
+
+    .dropdown-content.open {
+      animation: dropIn 0.25s ease forwards;
     }
 
     @keyframes dropIn {
@@ -146,7 +149,6 @@
       border-radius: 50%;
       box-shadow: 0 8px 20px rgba(0,0,0,0.15);
       transition: transform 0.4s ease, box-shadow 0.4s ease;
-
       opacity: 0;
       animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
     }
@@ -188,6 +190,8 @@
       background: linear-gradient(90deg, #38bdf8, #8b5cf6);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      color: #8b5cf6; /* Fallback */
+      background-clip: text;
     }
 
     .about-textbox p {
@@ -198,50 +202,21 @@
 
     /* Responsive */
     @media (max-width: 768px) {
-      /* Body Padding */
-      body {
-        padding: 14px;
-      }
-
-      /* Menü Button */
-      .dropbtn {
-        padding: 10px 22px;
-        font-size: 0.95rem;
-      }
-
-      /* Dropdown */
-      .dropdown-content {
-        width: 160px;
-      }
-
-      /* Profilbild */
-      .about-image img {
-        width: 180px;
-        height: 180px;
-      }
-
-      /* Textbox */
-      .about-textbox {
-        padding: 20px 16px;
-      }
-
-      .about-textbox h2 {
-        font-size: 1.7rem;
-      }
-
-      .about-textbox p {
-        font-size: 0.95rem;
-      }
-
-      /* Orbs kleiner */
+      body { padding: 14px; }
+      .dropbtn { padding: 10px 22px; font-size: 0.95rem; }
+      .dropdown-content { width: 160px; }
+      .about-image img { width: 180px; height: 180px; }
+      .about-textbox { padding: 20px 16px; }
+      .about-textbox h2 { font-size: 1.7rem; }
+      .about-textbox p  { font-size: 0.95rem; }
       .orb1 { width: 160px; height: 160px; }
       .orb2 { width: 130px; height: 130px; }
     }
 
     @media (max-width: 400px) {
-      .about-image img   { width: 140px; height: 140px; }
-      .about-textbox h2  { font-size: 1.4rem; }
-      .about-textbox p   { font-size: 0.9rem; }
+      .about-image img  { width: 140px; height: 140px; }
+      .about-textbox h2 { font-size: 1.4rem; }
+      .about-textbox p  { font-size: 0.9rem; }
     }
   </style>
 </head>
@@ -257,6 +232,7 @@
       <button class="dropbtn" id="dropbtn">Menü</button>
       <div class="dropdown-content" id="dropdown-content">
         <a href="index.html">Home</a>
+        <a href="todo.html">To-Do Liste</a>
         <a href="aboutme.html">Über Mich</a>
         <a href="impressum.html">Impressum</a>
       </div>
@@ -280,10 +256,20 @@
 
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+      const isOpen = menu.classList.contains('open');
+      if (isOpen) {
+        menu.classList.remove('open');
+        menu.style.display = 'none';
+      } else {
+        menu.style.display = 'block';
+        menu.classList.add('open');
+      }
     });
 
-    window.addEventListener('click', () => { menu.style.display = 'none'; });
+    window.addEventListener('click', () => {
+      menu.classList.remove('open');
+      menu.style.display = 'none';
+    });
   </script>
 </body>
 </html>
