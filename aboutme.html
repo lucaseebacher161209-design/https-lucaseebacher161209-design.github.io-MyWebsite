@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Über Mich</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #e0f2fe, #f5d0fe);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    /* Floating Orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .orb1 {
+      width: 280px; height: 280px;
+      background: rgba(56, 189, 248, 0.18);
+      top: 5%; left: 3%;
+      animation-delay: 0s;
+    }
+
+    .orb2 {
+      width: 220px; height: 220px;
+      background: rgba(139, 92, 246, 0.18);
+      bottom: 10%; right: 5%;
+      animation-delay: -4s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-25px); }
+    }
+
+    /* Top-Bar */
+    .top-bar {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 40px;
+      position: relative;
+      z-index: 10;
+      animation: slideDown 0.6s ease 0.1s both;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Dropdown */
+    .dropdown { position: relative; }
+
+    .dropbtn {
+      background-color: #e2e8f0;
+      color: #0f172a;
+      font-weight: bold;
+      padding: 10px 20px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .dropbtn:hover {
+      background: linear-gradient(90deg, #38bdf8, #8b5cf6);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      background-color: #e2e8f0;
+      text-align: center;
+      padding: 15px 0;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      z-index: 10;
+    }
+
+    .dropdown-content.open {
+      animation: dropIn 0.25s ease forwards;
+    }
+
+    @keyframes dropIn {
+      from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    .dropdown-content a {
+      display: block;
+      color: #0f172a;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1rem;
+      padding: 10px 0;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .dropdown-content a:hover {
+      background: linear-gradient(90deg, #38bdf8, #8b5cf6);
+      color: white;
+    }
+
+    /* About Container */
+    .about-container {
+      max-width: 800px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Bild */
+    .about-image img {
+      width: 250px;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 50%;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      opacity: 0;
+      animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.7); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .about-image img:hover {
+      transform: scale(1.07) rotate(2deg);
+      box-shadow: 0 16px 40px rgba(139, 92, 246, 0.3);
+    }
+
+    /* Textbox */
+    .about-textbox {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 25px 30px;
+      border-radius: 20px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.7s forwards;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .about-textbox:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.12);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .about-textbox h2 {
+      font-size: 2rem;
+      margin-bottom: 15px;
+      background: linear-gradient(90deg, #38bdf8, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: #8b5cf6; /* Fallback */
+      background-clip: text;
+    }
+
+    .about-textbox p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #334155;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      body { padding: 14px; }
+      .dropbtn { padding: 10px 22px; font-size: 0.95rem; }
+      .dropdown-content { width: 160px; }
+      .about-image img { width: 180px; height: 180px; }
+      .about-textbox { padding: 20px 16px; }
+      .about-textbox h2 { font-size: 1.7rem; }
+      .about-textbox p  { font-size: 0.95rem; }
+      .orb1 { width: 160px; height: 160px; }
+      .orb2 { width: 130px; height: 130px; }
+    }
+
+    @media (max-width: 400px) {
+      .about-image img  { width: 140px; height: 140px; }
+      .about-textbox h2 { font-size: 1.4rem; }
+      .about-textbox p  { font-size: 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Orbs -->
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+
+  <!-- Dropdown Menü -->
+  <div class="top-bar">
+    <div class="dropdown">
+      <button class="dropbtn" id="dropbtn">Menü</button>
+      <div class="dropdown-content" id="dropdown-content">
+        <a href="index.html">Home</a>
+        <a href="todo.html">To-Do Liste</a>
+        <a href="multitool.html">Multitool</a>
+        <a href="aboutme.html">Über Mich</a>
+        <a href="impressum.html">Impressum</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Me -->
+  <div class="about-container">
+    <div class="about-image">
+      <img src="img/PictureLuca.jpeg" alt="Foto von Luca">
+    </div>
+    <div class="about-textbox">
+      <h2>Über Mich</h2>
+      <p>Hallo! Ich bin <strong>Luca</strong>, 16 Jahre alt und erstelle gerne Websites.</p>
+    </div>
+  </div>
+
+  <script>
+    const btn  = document.getElementById('dropbtn');
+    const menu = document.getElementById('dropdown-content');
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = menu.classList.contains('open');
+      if (isOpen) {
+        menu.classList.remove('open');
+        menu.style.display = 'none';
+      } else {
+        menu.style.display = 'block';
+        menu.classList.add('open');
+      }
+    });
+
+    window.addEventListener('click', () => {
+      menu.classList.remove('open');
+      menu.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
