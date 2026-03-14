@@ -92,7 +92,10 @@
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
       border-radius: 12px;
       z-index: 10;
-      animation: dropIn 0.25s ease;
+    }
+
+    .dropdown-content.open {
+      animation: dropIn 0.25s ease forwards;
     }
 
     @keyframes dropIn {
@@ -155,6 +158,8 @@
 
     /* Hero */
     .center-content {
+      position: relative;
+      z-index: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -168,12 +173,11 @@
       background: linear-gradient(90deg, #38bdf8, #8b5cf6);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      color: #8b5cf6; /* Fallback */
       background-clip: text;
       margin: 0 0 20px 0;
       line-height: 1.2;
       transition: transform 0.3s ease;
-
-      /* Einlauf-Animation */
       opacity: 0;
       animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s forwards;
     }
@@ -199,7 +203,7 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* Floating orbs im Hintergrund */
+    /* Floating Orbs */
     .orb {
       position: fixed;
       border-radius: 50%;
@@ -244,10 +248,6 @@
       pointer-events: none;
     }
 
-    /* Inhalt über Canvas */
-    .center-content { position: relative; z-index: 1; }
-    .social_icons { z-index: 200; }
-
     /* Pfeil nach oben */
     #scrollTop {
       position: fixed;
@@ -287,54 +287,16 @@
       fill: white;
     }
 
+    /* Responsive */
     @media (max-width: 768px) {
-      /* Menü Button */
-      .dropbtn {
-        padding: 10px 22px;
-        font-size: 0.95rem;
-      }
-
-      /* Dropdown Inhalt */
-      .dropdown-content {
-        width: 160px;
-      }
-
-      /* Überschrift */
-      h1 {
-        font-size: 2.6rem;
-      }
-
-      /* Untertitel */
-      p {
-        font-size: 0.95rem;
-        padding: 0 10px;
-      }
-
-      /* TikTok Icon kleiner & näher am Rand */
-      .social_icons {
-        right: 14px;
-        top: 14px;
-        gap: 4px;
-      }
-
-      .social_icon {
-        width: 32px;
-        height: 32px;
-      }
-
-      .social-name {
-        font-size: 0.6rem;
-      }
-
-      /* Pfeil nach oben */
-      #scrollTop {
-        bottom: 20px;
-        right: 20px;
-        width: 40px;
-        height: 40px;
-      }
-
-      /* Orbs kleiner auf Mobile */
+      .dropbtn { padding: 10px 22px; font-size: 0.95rem; }
+      .dropdown-content { width: 160px; }
+      h1 { font-size: 2.6rem; }
+      p  { font-size: 0.95rem; padding: 0 10px; }
+      .social_icons { right: 14px; top: 14px; gap: 4px; }
+      .social_icon  { width: 32px; height: 32px; }
+      .social-name  { font-size: 0.6rem; }
+      #scrollTop    { bottom: 20px; right: 20px; width: 40px; height: 40px; }
       .orb1 { width: 180px; height: 180px; }
       .orb2 { width: 150px; height: 150px; }
       .orb3 { width: 100px; height: 100px; }
@@ -361,6 +323,7 @@
       <button class="dropbtn" id="dropbtn">Menü</button>
       <div class="dropdown-content" id="dropdown-content">
         <a href="index.html">Home</a>
+        <a href="todo.html">To-Do Liste</a>
         <a href="aboutme.html">Über Mich</a>
         <a href="impressum.html">Impressum</a>
       </div>
@@ -392,33 +355,39 @@
   </button>
 
   <script>
+    // ── Dropdown ──
     const btn  = document.getElementById('dropbtn');
     const menu = document.getElementById('dropdown-content');
-    const topBar = document.querySelector('.top-bar');
-    const scrollTopBtn = document.getElementById('scrollTop');
 
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      const open = menu.style.display === 'block';
-      menu.style.display = open ? 'none' : 'block';
+      const isOpen = menu.classList.contains('open');
+      if (isOpen) {
+        menu.classList.remove('open');
+        menu.style.display = 'none';
+      } else {
+        menu.style.display = 'block';
+        menu.classList.add('open');
+      }
     });
 
-    window.addEventListener('click', () => { menu.style.display = 'none'; });
+    window.addEventListener('click', () => {
+      menu.classList.remove('open');
+      menu.style.display = 'none';
+    });
 
-    // Scroll-Logik
+    // ── Scroll-to-Top ──
+    const scrollTopBtn = document.getElementById('scrollTop');
+
     window.addEventListener('scroll', () => {
-      const scrolled = window.scrollY > 100;
-
-      // Pfeil anzeigen/ausblenden
-      scrollTopBtn.classList.toggle('visible', scrolled);
+      scrollTopBtn.classList.toggle('visible', window.scrollY > 100);
     });
 
-    // Nach oben scrollen
     scrollTopBtn.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // ── Sterne ──
+    // ── Sterne / Partikel ──
     const canvas = document.getElementById('particles');
     const ctx    = canvas.getContext('2d');
 
@@ -427,7 +396,14 @@
       canvas.height = window.innerHeight;
     }
     resize();
-    window.addEventListener('resize', resize);
+    window.addEventListener('resize', () => {
+      resize();
+      // Sternpositionen nach Resize neu setzen damit keine Lücken entstehen
+      stars.forEach(s => {
+        s.x = Math.random() * canvas.width;
+        s.y = Math.random() * canvas.height;
+      });
+    });
 
     const COUNT = 120;
 
@@ -439,7 +415,7 @@
       speed:   Math.random() * 0.02 + 0.005,
       growing: Math.random() > 0.5,
       dy:      (Math.random() * 0.3 + 0.1) * (Math.random() > 0.5 ? 1 : -1),
-      dx:      (Math.random() * 0.15),
+      dx:      Math.random() * 0.15,
     }));
 
     function draw() {
@@ -458,15 +434,14 @@
         // Schweben
         s.y += s.dy * 0.3;
         s.x += s.dx * 0.2;
-        if (s.y < 0) s.y = canvas.height;
+        if (s.y < 0)            s.y = canvas.height;
         if (s.y > canvas.height) s.y = 0;
-        if (s.x > canvas.width) s.x = 0;
+        if (s.x > canvas.width)  s.x = 0;
 
         // Zeichnen mit Glühen
         ctx.save();
         ctx.globalAlpha = s.alpha;
 
-        // Glüh-Effekt
         const glow = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r * 4);
         glow.addColorStop(0, 'rgba(180, 160, 255, 0.8)');
         glow.addColorStop(1, 'rgba(100, 180, 255, 0)');
@@ -475,7 +450,6 @@
         ctx.fillStyle = glow;
         ctx.fill();
 
-        // Stern-Kern
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
         ctx.fillStyle = 'white';
